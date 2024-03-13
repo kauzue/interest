@@ -6,6 +6,13 @@
 #include "cursor.h"
 #include "interest.h"
 
+void menu();
+void regist();
+void check_register();
+void modify_data();
+void modify(int);
+void person_data(int);
+
 int g_person_num;
 
 bool init()
@@ -44,6 +51,9 @@ void menu()
 		printf("등록자 확인");
 
 		MoveCursor(x, y + 4);
+		printf("정보 수정");
+
+		MoveCursor(x, y + 6);
 		printf("종료");
 
 		while (key != 4) {
@@ -61,7 +71,7 @@ void menu()
 			}
 
 			case DOWN: {
-				if (y < 6) {
+				if (y < 8) {
 					MoveCursor(x - 2, y);
 					printf(" ");
 
@@ -94,6 +104,19 @@ void menu()
 				}
 
 				case 6: {
+					if (g_person_num == 0) {
+						printf("등록된 사람이 없습니다. \n");
+						system("pause");
+					}
+
+					else {
+						modify_data();
+					}
+
+					break;
+				}
+
+				case 8: {
 					return;
 				}
 				}
@@ -198,6 +221,142 @@ void check_register()
 			}
 		}
 	}
+}
+
+void modify_data()
+{
+	int key, x, y;
+	int money;
+
+	while (true) {
+		key = 0;
+		x = 2;
+		y = 2;
+
+		system("cls");
+
+		printf("정보 수정 \n");
+
+		for (int i = 0; i < g_person_num; i++) {
+			if (i == 0) {
+				MoveCursor(x - 2, y + 2 * i);
+				printf("> ");
+			}
+
+			else {
+				MoveCursor(x, y + 2 * i);
+			}
+			printf("%s", s_person[i].name);
+		}
+
+		MoveCursor(x, y + g_person_num * 2);
+		printf("이전");
+
+		while (key != 4) {
+			key = ControlKey();
+
+			switch (key) {
+			case UP: {
+				if (y > 2) {
+					MoveCursor(x - 2, y);
+					printf(" ");
+					MoveCursor(x - 2, y -= 2);
+					printf(">");
+				}
+				break;
+			}
+
+			case DOWN: {
+				if (y < g_person_num * 2 + 2) {
+					MoveCursor(x - 2, y);
+					printf(" ");
+
+					MoveCursor(x - 2, y += 2);
+					printf(">");
+				}
+				break;
+			}
+
+			case ENTER: {
+				int num_player = y / 2 - 1;
+
+				system("cls");
+
+				if (y == g_person_num * 2 + 2) {
+					return;
+				}
+
+				else {
+					while (true) {
+						key = 0;
+						x = 2;
+						y = 2;
+
+						printf("수정할 정보를 골라주세요. \n");
+
+						MoveCursor(x - 2, y);
+						printf("> 이름 : %s \n", s_person[num_player].name);
+
+						MoveCursor(x, y + 2);
+						printf("금액 : %d원 \n", s_person[num_player].money);
+
+						MoveCursor(x, y + 4);
+						printf("이자율 : %d%% \n", s_person[num_player].interest_rate);
+
+						MoveCursor(x, y + 6);
+						printf("이전");
+
+						while (key != 4) {
+							key = ControlKey();
+
+							switch (key) {
+							case UP: {
+								if (y > 2) {
+									MoveCursor(x - 2, y);
+									printf(" ");
+									MoveCursor(x - 2, y -= 2);
+									printf(">");
+								}
+								break;
+							}
+
+							case DOWN: {
+								if (y < 8) {
+									MoveCursor(x - 2, y);
+									printf(" ");
+
+									MoveCursor(x - 2, y += 2);
+									printf(">");
+								}
+								break;
+							}
+
+							case ENTER: {
+								system("cls");
+
+								if (y == 8) {
+									goto break_while;
+								}
+
+								else {
+									modify(num_player);
+								}
+							}
+							}
+						}
+					}
+				}
+			}
+			}
+		}
+	break_while:;
+	}
+}
+
+void modify(int num_data)
+{
+	printf("%d \n", num_data);
+	system("pause");
 
 	system("cls");
 }

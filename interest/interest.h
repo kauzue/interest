@@ -14,7 +14,3 @@ typedef struct person {
 person_t s_person[NUM_MAX_PERSON];
 
 bool init();
-void menu();
-void regist();
-void check_register();
-void person_data(int);
