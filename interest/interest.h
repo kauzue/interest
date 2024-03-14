@@ -7,8 +7,8 @@
 
 typedef struct person {
 	char name[MAX_MSG_LEN];
-	int money;
-	int interest_rate;
+	unsigned long long int money;
+	unsigned int interest_rate;
 }person_t;
 
 person_t s_person[NUM_MAX_PERSON];

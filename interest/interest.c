@@ -6,11 +6,13 @@
 #include "cursor.h"
 #include "interest.h"
 
+enum DATA { NAME, MONEY, INTEREST_RATE };
+
 void menu();
 void regist();
 void check_register();
 void modify_data();
-void modify(int);
+void modify(int, int);
 void person_data(int);
 
 int g_person_num;
@@ -142,10 +144,10 @@ void regist()
 	scanf_s("%s", person.name, MAX_MSG_LEN);
 
 	printf("지불할 금액 : ");
-	scanf_s("%d", &person.money);
+	scanf_s("%llu", &person.money);
 
 	printf("이자율 : ");
-	scanf_s("%d", &person.interest_rate);
+	scanf_s("%u", &person.interest_rate);
 
 	memcpy(&s_person[g_person_num], &person, sizeof(person_t));
 	++g_person_num;
@@ -280,14 +282,14 @@ void modify_data()
 			case ENTER: {
 				int num_player = y / 2 - 1;
 
-				system("cls");
-
 				if (y == g_person_num * 2 + 2) {
 					return;
 				}
 
 				else {
 					while (true) {
+						system("cls");
+
 						key = 0;
 						x = 2;
 						y = 2;
@@ -298,10 +300,10 @@ void modify_data()
 						printf("> 이름 : %s \n", s_person[num_player].name);
 
 						MoveCursor(x, y + 2);
-						printf("금액 : %d원 \n", s_person[num_player].money);
+						printf("금액 : %llu원 \n", s_person[num_player].money);
 
 						MoveCursor(x, y + 4);
-						printf("이자율 : %d%% \n", s_person[num_player].interest_rate);
+						printf("이자율 : %u%% \n", s_person[num_player].interest_rate);
 
 						MoveCursor(x, y + 6);
 						printf("이전");
@@ -332,6 +334,7 @@ void modify_data()
 							}
 
 							case ENTER: {
+
 								system("cls");
 
 								if (y == 8) {
@@ -339,7 +342,8 @@ void modify_data()
 								}
 
 								else {
-									modify(num_player);
+									y = y / 2 - 1;
+									modify(num_player, y);
 								}
 							}
 							}
@@ -353,18 +357,51 @@ void modify_data()
 	}
 }
 
-void modify(int num_data)
+void modify(int num_person, int num_data)
 {
-	printf("%d \n", num_data);
-	system("pause");
+	printf("현재 수정할 정보 : ");
 
-	system("cls");
+	switch (num_data) {
+	case NAME: {
+		printf("이름 - %s \n", s_person[num_person].name);
+		printf("이름 : ");
+		scanf_s("%s", s_person[num_person].name, MAX_MSG_LEN);
+
+		break;
+	}
+
+	case MONEY: {
+		printf("돈 - %llu \n", s_person[num_person].money);
+		printf("돈 : ");
+		scanf_s("%llu", &s_person[num_person].money);
+
+		break;
+	}
+
+	case INTEREST_RATE: {
+		printf("이자율 - %u \n", s_person[num_person].interest_rate);
+		printf("이자율 : ");
+		scanf_s("%u", &s_person[num_person].interest_rate);
+
+		break;
+	}
+	}
+
+	FILE* pb = fopen("person.bin", "wb");
+	if (pb == NULL) {
+		puts("사람 파일 오픈 실패");
+		return false;
+	}
+
+	fwrite(s_person, sizeof(person_t), g_person_num, pb);
+
+	fclose(pb);
 }
 
 void person_data(int num_person)
 {
 	printf("이름 : %s \n", s_person[num_person].name);
-	printf("금액 : %d원 \n", s_person[num_person].money);
-	printf("이자율 : %d%% \n", s_person[num_person].interest_rate);
+	printf("금액 : %llu원 \n", s_person[num_person].money);
+	printf("이자율 : %u%% \n", s_person[num_person].interest_rate);
 	system("pause");
 }
