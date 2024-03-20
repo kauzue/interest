@@ -12,6 +12,7 @@ void menu();
 void regist();
 void check_register();
 void modify_data();
+void delete_data(int);
 void modify(int, int);
 void person_data(int);
 
@@ -23,6 +24,7 @@ bool init()
 	FILE* pb = fopen("person.bin", "rb");
 	if (pb == NULL) {
 		puts("사람 파일 오픈 실패");
+		system("pause");
 		return false;
 	}
 
@@ -280,7 +282,7 @@ void modify_data()
 			}
 
 			case ENTER: {
-				int num_player = y / 2 - 1;
+				int num_person = y / 2 - 1;
 
 				if (y == g_person_num * 2 + 2) {
 					return;
@@ -297,15 +299,18 @@ void modify_data()
 						printf("수정할 정보를 골라주세요. \n");
 
 						MoveCursor(x - 2, y);
-						printf("> 이름 : %s \n", s_person[num_player].name);
+						printf("> 이름 : %s \n", s_person[num_person].name);
 
 						MoveCursor(x, y + 2);
-						printf("금액 : %llu원 \n", s_person[num_player].money);
+						printf("금액 : %llu원 \n", s_person[num_person].money);
 
 						MoveCursor(x, y + 4);
-						printf("이자율 : %u%% \n", s_person[num_player].interest_rate);
+						printf("이자율 : %u%% \n", s_person[num_person].interest_rate);
 
 						MoveCursor(x, y + 6);
+						printf("삭제");
+
+						MoveCursor(x, y + 8);
 						printf("이전");
 
 						while (key != 4) {
@@ -323,7 +328,7 @@ void modify_data()
 							}
 
 							case DOWN: {
-								if (y < 8) {
+								if (y < 10) {
 									MoveCursor(x - 2, y);
 									printf(" ");
 
@@ -338,12 +343,17 @@ void modify_data()
 								system("cls");
 
 								if (y == 8) {
+									delete_data(num_person);
+									goto break_while;
+								}
+
+								else if (y == 10) {
 									goto break_while;
 								}
 
 								else {
 									y = y / 2 - 1;
-									modify(num_player, y);
+									modify(num_person, y);
 								}
 							}
 							}
@@ -355,6 +365,29 @@ void modify_data()
 		}
 	break_while:;
 	}
+}
+
+void delete_data(int num_person)
+{
+	printf("정보가 삭제되었습니다.");
+	system("cls");
+
+	for (int i = num_person; i < g_person_num; i++) {
+		strcpy(s_person[num_person].name, s_person[num_person + 1].name);
+		s_person[num_person].money = s_person[num_person + 1].money;
+		s_person[num_person].interest_rate = s_person[num_person + 1].interest_rate;
+	}
+	g_person_num--;
+
+	FILE* pb = fopen("person.bin", "wb");
+	if (pb == NULL) {
+		puts("사람 파일 오픈 실패");
+		return false;
+	}
+
+	fwrite(s_person, sizeof(person_t), g_person_num, pb);
+
+	fclose(pb);
 }
 
 void modify(int num_person, int num_data)
