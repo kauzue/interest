@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\Visual Studio\interest\x64\Debug\interest.exe</FullPath>
+      <FullPath>D:\Visual Studio\interest\Release\interest.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

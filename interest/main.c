@@ -2,10 +2,7 @@
 
 int main(void)
 {
-	if (init() == false) {
-		return 0;
-	}
-
+	init();
 	menu();
 
 	return 0;

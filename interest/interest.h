@@ -8,9 +8,9 @@
 typedef struct person {
 	char name[MAX_MSG_LEN];
 	unsigned long long int money;
-	unsigned int interest_rate;
+	double interest_rate;
 }person_t;
 
 person_t s_person[NUM_MAX_PERSON];
 
-bool init();
+void init();
