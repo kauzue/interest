@@ -1,13 +1,14 @@
 #include <Windows.h>
+#include <conio.h>
 
 #include "cursor.h"
 
 int ControlKey()
 {
-    int key = getch();
+    int key = _getch();
 
     if (key == 224) {
-        key = getch();
+        key = _getch();
     }
 
     if (key == 'w' || key == 'W' || key == 72) {

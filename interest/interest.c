@@ -28,7 +28,7 @@ void init()
 		pb = fopen("person.bin", "w+b");
 	}
 
-	g_person_num = fread(s_person, sizeof(person_t), NUM_MAX_PERSON, pb);
+	g_person_num = (int)fread(s_person, sizeof(person_t), NUM_MAX_PERSON, pb);
 
 	fclose(pb);
 }
@@ -36,7 +36,7 @@ void init()
 void menu()
 {
 	int key, x, y;
-	int money;
+	int money = 0;
 
 	while (true) {
 		key = 0;
@@ -295,7 +295,7 @@ void check_register()
 void modify_data()
 {
 	int key, x, y;
-	int money;
+	int money = 0;
 
 	while (true) {
 		key = 0;
@@ -412,7 +412,7 @@ void modify_data()
 
 								if (y == 8) {
 									printf("원래 금액 : %llu \n", s_person[num_person].money);
-									s_person[num_person].money += s_person[num_person].money * (s_person[num_person].interest_rate / 100);
+									s_person[num_person].money += (long long unsigned int)(s_person[num_person].money * (s_person[num_person].interest_rate / 100));
 									printf("변경된 금액 : %llu \n", s_person[num_person].money);
 									system("pause");
 								}
@@ -457,7 +457,7 @@ void delete_data(int num_person)
 	FILE* pb = fopen("person.bin", "wb");
 	if (pb == NULL) {
 		puts("사람 파일 오픈 실패");
-		return false;
+		return;
 	}
 
 	fwrite(s_person, sizeof(person_t), g_person_num, pb);
@@ -498,7 +498,7 @@ void modify(int num_person, int num_data)
 	FILE* pb = fopen("person.bin", "wb");
 	if (pb == NULL) {
 		puts("사람 파일 오픈 실패");
-		return false;
+		return;
 	}
 
 	fwrite(s_person, sizeof(person_t), g_person_num, pb);
